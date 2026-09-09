@@ -1,0 +1,135 @@
+day3 SQL
+DCL:
+GRANT
+REVOKE
+
+AUTO_INCREMENT
+CREAT TABLE FROM USING ANOTHER TABLE
+COMPUTED COLUMNS
+
+
+
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+Server version: 8.0.46 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use pfs6;
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_pfs6  |
++-----------------+
+| company_staff   |
+| departments     |
+| employees       |
+| student_details |
++-----------------+
+4 rows in set (0.02 sec)
+
+mysql> drop database pfs6;
+Query OK, 4 rows affected (0.16 sec)
+
+mysql> create database da6;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use da6;
+Database changed
+mysql> CREATE TABLE STUDENTS(
+    -> SNO INT PRIMARY KEY,
+    -> SNAME VARCHAR(30),
+    -> SEMAIL VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> INSERT INTO STUDENTS VALUES(111,'MALLI','MALLI@CODEGNAN');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT*FROM STUDENTS;
++-----+-------+----------------+
+| SNO | SNAME | SEMAIL         |
++-----+-------+----------------+
+| 111 | MALLI | MALLI@CODEGNAN |
++-----+-------+----------------+
+1 row in set (0.00 sec)
+
+mysql> CREATE USER RAM IDENTIFIED BY 'RAM123';
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE USER KRISH IDENTIFIED BY 'KRISH123';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> GRANT SELECT,INSERT,UPDATE ON STUDENTS TO RAM;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT SELECT,DROP,ON STUDENTS TO KRISH;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON STUDENTS TO KRISH' at line 1
+mysql> GRANT SELECT,DROP ON STUDENTS TO KRISH;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> REVOKE INSERT,UPDATE ON STUDENTS FROM RAM;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> REVOKE SELECT ON STUDENTS FROM KRISH;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> CREATE TABLE PRODUCTS(
+    -> PRODUCTID INT AUTO_INCREMENT PRIMARY KEY,
+    -> PNAME VARCHAR(30),
+    -> PRICE DECIMAL(10,2),
+    -> QUANTITY INT,
+    -> TOTAL AMOUNT DECIMAL(10,2)GENERATED ALWAYS AS(PRICE*QUANTITY)STORED
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AMOUNT DECIMAL(10,2)GENERATED ALWAYS AS(PRICE*QUANTITY)STORED
+)' at line 6
+mysql> CREATE TABLE PRODUCTS(
+    -> PRODUCTID INT AUTO_INCREMENT PRIMARY KEY,
+    -> PNAME VARCHAR(30),
+    -> PRICE DECIMAL(10,2),
+    -> QUANTITY INT,
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 6
+mysql> CREATE TABLE PRODUCTS(
+    -> PRODUCTID INT AUTO_INCREMENT PRIMARY KEY,
+    -> PNAME VARCHAR(30),
+    -> PRICE DECIMAL(10,2),
+    -> QUANTITY INT,
+    -> TOTALAMOUNT DECIMAL(10,2)GENERATED ALWAYS AS(PRICE*QUANTITY)STORED
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO PRODUCTS(PNAME,PRICE,QUANTITY)VALUES
+    -> ('MOBILE',10000,1);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+--------+----------+----------+-------------+
+| PRODUCTID | PNAME  | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+--------+----------+----------+-------------+
+|         1 | MOBILE | 10000.00 |        1 |    10000.00 |
++-----------+--------+----------+----------+-------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO PRODUCTS(PNAME,PRICE,QUANTITY)VALUES
+    -> ('IPAD',30000,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+--------+----------+----------+-------------+
+| PRODUCTID | PNAME  | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+--------+----------+----------+-------------+
+|         1 | MOBILE | 10000.00 |        1 |    10000.00 |
+|         2 | IPAD   | 30000.00 |        3 |    90000.00 |
++-----------+--------+----------+----------+-------------+
+2 rows in set (0.00 sec)
+
+mysql>
